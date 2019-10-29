@@ -1,6 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+//database name and colums
 final String contactTable = "contactTable";
 final String idColumn = "idColumn";
 final String nameColumn = "nameColumn";
@@ -26,6 +27,8 @@ class ContactHelper {
     }
   }
 
+
+  //Init Database
   Future<Database> initDb() async {
     final databasePatch = await getDatabasesPath();
     final path = join(databasePatch, "contacts.db");
@@ -42,7 +45,7 @@ class ContactHelper {
     return contact;
   }
 
-  // busncando um contato pelo id
+  // buscando um contato pelo id
   Future<Contact> getContact(int id) async {
     Database dbContact = await db;
     List<Map> maps = await dbContact.query(contactTable,columns: [idColumn,
@@ -54,9 +57,48 @@ class ContactHelper {
     }
   }
 
+  //deletando um contato
+  Future<int> deleteContact(int id) async{
+    Database dbContact = await db;
+   return await dbContact.delete(contactTable, where: "$idColumn = ?",whereArgs: [id]);
+  }
+
+  // atualizando um contato
+  Future<int> updateContact(Contact contact)async{
+    Database dbContact = await db;
+    return await dbContact.update(contactTable, contact.toMap(),where: "$idColumn = ?",whereArgs: [contact.id] );
+  }
+
+  // Buscando todos os contatos
+  Future<List> getAllContact() async{
+    Database dbContact = await db;
+    List listMap =  await dbContact.rawQuery("SELECT * FROM $contactTable");
+    List<Contact> list = List();
+    for (Map m in listMap){
+      list.add(Contact.fromMap(m));
+    }
+    return list;
+  }
+
+
+  Future<int> getNumber()async{
+    Database dbContact = await db;
+    return Sqflite.firstIntValue(await dbContact.rawQuery("SELECT COUNT(*) FROM $contactTable") );
+  }
+
+  //fechando DB
+  Future close() async{
+    Database dbContact = await db;
+    dbContact.close();
+  }
+
+
+
 
 }
 
+
+// Model
 class Contact {
   int id;
   String name;
