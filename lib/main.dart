@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/ui/HomePage.dart';
 
 void main() {
-  runApp(CupertinoApp(
+  runApp(MaterialApp(
     home: HomePage(),
   ));
 }

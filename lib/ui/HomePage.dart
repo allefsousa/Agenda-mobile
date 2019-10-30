@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/helpers/contact_helper.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -7,28 +8,38 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   ContactHelper helper = ContactHelper();
-
+  List<Contact> contact = List();
 
   @override
   void initState() {
     super.initState();
-
-    // testando implemenatção do bd
-//    Contact c = Contact();
-//    c.name = "Allef";
-//    c.img = "AllefImage";
-//    c.phone = "169919263895";
-//    c.email= "allefsousa_1@hotmail.com";
-//    helper.saveContact(c);
-
-    // buscando contatos
-  helper.getAllContacts().then((list){
-    print(list);
-  });
+    helper.getAllContacts().then((list){
+      setState(() {
+        contact = list;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Contatos"),
+        backgroundColor: Colors.red,
+        centerTitle: true,
+      ),
+      backgroundColor: Colors.white,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.add),
+        backgroundColor: Colors.red,
+      ),
+      body: ListView.builder(itemBuilder: (context,index){
+
+      },
+        itemCount: contact.length,
+        padding: EdgeInsets.all(10.0),
+      ),
+    );
   }
 }
