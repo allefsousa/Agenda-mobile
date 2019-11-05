@@ -20,17 +20,22 @@ class _ContactPageState extends State<ContactPage> with SingleTickerProviderStat
     }else{
       _editContact = Contact.fromMap(widget.contact.toMap());
     }
-
-
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.red,
+        title: Text(_editContact.name ?? "Novo Contato"),
+        centerTitle: true,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){},
+        child: Icon(Icons.save),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
 }
