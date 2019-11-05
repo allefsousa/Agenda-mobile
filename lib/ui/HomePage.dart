@@ -45,6 +45,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+
+
   Widget _contactCard(BuildContext context, int index) {
     return GestureDetector(
       child: Card(
