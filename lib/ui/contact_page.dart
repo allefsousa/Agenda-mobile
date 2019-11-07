@@ -6,7 +6,7 @@ import 'package:flutter_app/helpers/contact_helper.dart';
 class ContactPage extends StatefulWidget {
   final Contact contact;
 
-  ContactPage({this.contact});
+  ContactPage({this.contact}); // parametro opcional
 
   @override
   _ContactPageState createState() => _ContactPageState();

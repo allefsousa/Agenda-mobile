@@ -1,6 +1,9 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/helpers/contact_helper.dart';
+import 'package:flutter_app/helpers/contact_helper.dart' as prefix0;
+import 'package:flutter_app/ui/contact_page.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,11 +18,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    helper.getAllContacts().then((list) {
-      setState(() {
-        contact = list;
-      });
-    });
+    _getAllContacts();
   }
 
   @override
@@ -32,7 +31,9 @@ class _HomePageState extends State<HomePage> {
       ),
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          _showContactPage();
+        },
         child: Icon(Icons.add),
         backgroundColor: Colors.red,
       ),
@@ -40,9 +41,9 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (context, index) {
           return AnimationConfiguration.staggeredList(
               position: index,
-              duration: const Duration(milliseconds: 375) ,
+              duration: const Duration(milliseconds: 375),
               child: SlideAnimation(
-                verticalOffset: 50.0,
+                  verticalOffset: 50.0,
                   child: FadeInAnimation(child: _contactCard(context, index))));
 //        return _contactCard(context, index);
         },
@@ -96,6 +97,29 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+      onTap: (){
+        _showContactPage(contact: contact[index]);
+      },
     );
+  }
+
+  // router navigation para nova tela
+  void _showContactPage({Contact contact}) async { // parametro opcional
+    final reacContact = await  Navigator.push(context, MaterialPageRoute(builder: (context) => ContactPage(contact: contact,)));
+    if (reacContact != null){
+      if(contact != null){
+       await helper.updateContact(reacContact); // atualizando um contato
+      }else{
+        await helper.saveContact(reacContact);  // salvando um contato novo
+      }
+      _getAllContacts();
+    }
+  }
+  void _getAllContacts(){ // buscando os contatos
+    helper.getAllContacts().then((list) {
+      setState(() {
+        contact = list;
+      });
+    });
   }
 }
